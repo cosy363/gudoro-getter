@@ -18,7 +18,11 @@
                 "chat:write.public",
                 "files:write",
                 "channels:read",
-                "groups:read"
+                "groups:read",
+                "channels:history",
+                "groups:history",
+                "im:write",
+                "mpim:write"
             ]
         }
     },

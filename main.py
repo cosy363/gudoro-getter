@@ -54,7 +54,7 @@ def check_environment():
     print("🔍 환경변수 체크 중...")
     
     required_vars = {
-        'OPENAI_API_KEY': 'OpenAI API 키 (LLM 요약용)',
+        'GEMINI_API_KEY': 'Google Gemini API 키 (LLM 요약용)',
         'SLACK_BOT_TOKEN': '슬랙 봇 토큰 (메시지 전송용)'
     }
     

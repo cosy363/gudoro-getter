@@ -19,8 +19,8 @@ def call_llm(prompt):
     # Gemini API 설정
     genai.configure(api_key=api_key)
     
-    # Gemini Pro 모델 사용
-    model = genai.GenerativeModel("gemini-pro")
+    # Gemini 1.5 Flash 모델 사용 (더 빠르고 안정적)
+    model = genai.GenerativeModel("gemini-1.5-flash")
     
     try:
         response = model.generate_content(prompt)

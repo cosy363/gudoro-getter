@@ -47,9 +47,9 @@ pip install -r requirements.txt
 `.env` 파일을 생성하고 다음 환경변수를 설정하세요:
 
 ```bash
-# OpenAI API 키 (LLM 메뉴 요약용)
-# https://platform.openai.com/api-keys 에서 발급
-OPENAI_API_KEY=sk-your-openai-api-key-here
+# Google Gemini API 키 (LLM 메뉴 요약용)
+# https://makersuite.google.com/app/apikey 에서 발급
+GEMINI_API_KEY=your-gemini-api-key-here
 
 # 슬랙 봇 토큰 (메시지 전송용)  
 # https://api.slack.com/apps 에서 봇 생성 후 발급
