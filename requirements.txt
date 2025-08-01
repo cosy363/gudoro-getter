@@ -1,1 +1,9 @@
 pocketflow>=0.0.1
+openai>=1.0.0
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+selenium>=4.15.0
+slack-sdk>=3.23.0
+schedule>=1.2.0
+python-dotenv>=1.0.0
+lxml>=4.9.0
