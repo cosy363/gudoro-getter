@@ -124,7 +124,7 @@ schedule_daily_menu_job(run_menu_workflow, shared, "09:00")  # 오전 9시로 �
 ### 슬랙 채널 변경
 `flow.py`의 `get_default_shared_store()` 함수에서 채널을 변경할 수 있습니다:
 ```python
-"slack_channel": "#your-channel",
+"slack_channel": "#gudo",
 ```
 
 ## 🐛 문제 해결

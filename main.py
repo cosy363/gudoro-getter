@@ -116,7 +116,7 @@ def test_mode():
     # 더미 shared store
     shared = get_default_shared_store()
     shared["config"]["debug_mode"] = True
-    shared["config"]["slack_channel"] = "#test-channel"  # 테스트 채널로 변경
+    shared["config"]["slack_channel"] = "#gudo"  # gudo 채널 사용
     
     # 더미 메뉴 데이터 주입
     shared["menu_data"]["raw_content"] = """
@@ -167,7 +167,7 @@ def holiday_test_mode():
     # 더미 shared store
     shared = get_default_shared_store()
     shared["config"]["debug_mode"] = True
-    shared["config"]["slack_channel"] = "#test-channel"
+    shared["config"]["slack_channel"] = "#gudo"
     
     # 휴무일 상황을 시뮬레이션하는 더미 데이터
     shared["menu_data"]["raw_content"] = """
@@ -211,7 +211,7 @@ def special_menu_test_mode():
     # 더미 shared store
     shared = get_default_shared_store()
     shared["config"]["debug_mode"] = True
-    shared["config"]["slack_channel"] = "#test-channel"
+    shared["config"]["slack_channel"] = "#gudo"
     
     # 특별 메뉴 상황을 시뮬레이션하는 더미 데이터
     shared["menu_data"]["raw_content"] = """

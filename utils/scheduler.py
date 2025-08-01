@@ -134,7 +134,7 @@ if __name__ == "__main__":
     test_shared = {
         "config": {
             "instagram_url": "https://www.instagram.com/sunaedong_buffet/",
-            "slack_channel": "#lunch-menu",
+            "slack_channel": "#gudo",
             "debug_mode": True
         }
     }

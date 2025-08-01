@@ -1,0 +1,36 @@
+{
+    "display_information": {
+        "name": "구도 메뉴 알림봇",
+        "description": "매일 오전 11시에 구도 한식뷔페 메뉴를 자동으로 가져와서 슬랙으로 전송하는 봇입니다.",
+        "background_color": "#ff6b35",
+        "long_description": "인스타그램에서 구도 한식뷔페(@sunaedong_buffet)의 일일 메뉴를 크롤링하고, AI를 활용해 메뉴를 요약한 후 슬랙 채널로 자동 전송합니다. 매일 오전 11시에 자동 실행되며, 수동 실행도 지원합니다."
+    },
+    "features": {
+        "bot_user": {
+            "display_name": "구도메뉴봇",
+            "always_online": true
+        }
+    },
+    "oauth_config": {
+        "scopes": {
+            "bot": [
+                "chat:write",
+                "chat:write.public",
+                "files:write",
+                "channels:read",
+                "groups:read"
+            ]
+        }
+    },
+    "settings": {
+        "event_subscriptions": {
+            "bot_events": []
+        },
+        "interactivity": {
+            "is_enabled": false
+        },
+        "org_deploy_enabled": false,
+        "socket_mode_enabled": false,
+        "token_rotation_enabled": false
+    }
+} 
