@@ -66,11 +66,21 @@ SLACK_BOT_TOKEN=xoxb-your-slack-bot-token-here
 
 ### 4. 슬랙 봇 설정
 
+**방법 1: Manifest 파일 사용 (추천)**
+1. [Slack API 웹사이트](https://api.slack.com/apps) 접속
+2. **"Create New App"** → **"From an app manifest"** 선택
+3. `slack-manifest.json` 파일 내용을 복사해서 붙여넣기
+4. **"Install to Workspace"** 클릭
+5. Bot Token 복사
+
+**방법 2: 수동 설정**
 1. [Slack API 웹사이트](https://api.slack.com/apps)에서 새 앱 생성
 2. **Bot Token Scopes**에 다음 권한 추가:
-   - `chat:write` (메시지 전송)
-   - `chat:write.public` (공개 채널 전송)
-3. 봇을 원하는 채널에 초대: `/invite @your-bot-name`
+   - `chat:write`, `chat:write.public`
+   - `channels:read`, `groups:read`
+   - `channels:history`, `groups:history`
+   - `files:write`, `im:write`, `mpim:write`
+3. 봇을 원하는 채널에 초대: `/invite @구도메뉴봇`
 
 ## 💻 사용 방법
 

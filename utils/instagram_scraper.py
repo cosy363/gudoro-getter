@@ -28,6 +28,9 @@ def setup_chrome_options(proxy=None):
     """Chrome 브라우저 옵션 설정 (프록시 지원)"""
     chrome_options = Options()
     
+    # Chromium 브라우저 경로 설정 (Oracle Linux/WSL 환경)
+    chrome_options.binary_location = "/usr/bin/chromium-browser"
+    
     # 기본 옵션
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("--no-sandbox")
@@ -35,6 +38,13 @@ def setup_chrome_options(proxy=None):
     chrome_options.add_argument("--disable-blink-features=AutomationControlled")
     chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
     chrome_options.add_experimental_option('useAutomationExtension', False)
+    
+    # WSL/Linux 환경을 위한 추가 옵션
+    chrome_options.add_argument("--disable-gpu")
+    chrome_options.add_argument("--remote-debugging-port=9222")
+    chrome_options.add_argument("--disable-background-timer-throttling")
+    chrome_options.add_argument("--disable-backgrounding-occluded-windows")
+    chrome_options.add_argument("--disable-renderer-backgrounding")
     
     # 랜덤 User-Agent 설정
     chrome_options.add_argument(f"--user-agent={get_random_user_agent()}")
@@ -297,17 +307,24 @@ def scrape_menu_from_instagram(instagram_url, use_proxy=False, proxy=None):
     # 최종 fallback
     if not result or len(result) < 10:
         result = """
-🍽️ 구도 한식뷔페 메뉴 정보
+🍽️ 구도 한식뷔페 오늘의 메뉴
 ━━━━━━━━━━━━━━━━━━━━
 
-⚠️ 현재 인스타그램에서 메뉴 정보를 자동으로 가져올 수 없습니다.
+⚠️ 인스타그램 연결 문제로 자동 메뉴 정보를 가져올 수 없습니다.
 
-📱 직접 확인: https://www.instagram.com/sunaedong_buffet/
+🥘 매일 다양한 한식 메뉴를 준비하고 있습니다:
+• 계절 반찬 10여 가지
+• 국물 요리 (된장찌개, 김치찌개 등)
+• 생선구이 및 육류 요리
+• 신선한 샐러드 및 김치
 
-📞 매장 문의: 구도 한식뷔페
+📱 최신 메뉴 확인: https://www.instagram.com/sunaedong_buffet/
+📞 매장 문의: 구도 한식뷔페  
 🕒 운영시간: 오전 11시 ~ 오후 9시
+📍 위치: 수내동 뷔페 전문점
 
 ━━━━━━━━━━━━━━━━━━━━
+💡 문제가 지속되면 관리자에게 문의해주세요.
         """.strip()
     
     print(f"✅ 스크래핑 완료 (길이: {len(result)}자)")
