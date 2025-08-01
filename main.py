@@ -9,6 +9,8 @@
     python main.py --now              # 즉시 실행 모드  
     python main.py --test             # 테스트 모드 (더미 데이터)
     python main.py --check            # 환경변수 체크
+    python main.py --holiday-test     # 휴무일 상황 테스트
+    python main.py --special-test     # 특별 메뉴 상황 테스트
 """
 
 import argparse
@@ -24,7 +26,13 @@ try:
 except ImportError:
     pass
 
-from flow import create_menu_notification_flow, create_simple_menu_flow, get_default_shared_store
+from flow import (
+    create_menu_notification_flow, 
+    create_simple_menu_flow, 
+    create_holiday_test_flow,
+    create_special_menu_test_flow,
+    get_default_shared_store
+)
 from utils.scheduler import schedule_daily_menu_job, run_scheduler, run_immediately, get_next_run_time
 from utils.slack_sender import send_slack_message
 
@@ -150,6 +158,105 @@ def test_mode():
     except Exception as e:
         print(f"❌ 테스트 실패: {e}")
 
+def holiday_test_mode():
+    """
+    휴무일 상황 테스트 모드
+    """
+    print("🏖️ 휴무일 상황 테스트 모드 실행 중...")
+    
+    # 더미 shared store
+    shared = get_default_shared_store()
+    shared["config"]["debug_mode"] = True
+    shared["config"]["slack_channel"] = "#test-channel"
+    
+    # 휴무일 상황을 시뮬레이션하는 더미 데이터
+    shared["menu_data"]["raw_content"] = """
+오늘은 정기 휴무일입니다.
+매주 월요일은 휴무입니다.
+
+다음 영업일은 화요일입니다.
+맛있는 한식으로 다시 찾아뵙겠습니다.
+
+감사합니다! 🍽️
+    """.strip()
+    
+    try:
+        # 휴무일 테스트 플로우 실행
+        flow = create_holiday_test_flow()
+        
+        # FetchMenuNode 건너뛰기 위해 상태 미리 설정
+        shared["status"]["fetch_success"] = True
+        
+        flow.run(shared)
+        
+        print("✅ 휴무일 테스트 완료!")
+        print(f"📊 최종 상태: {shared['status']}")
+        
+        # 상황 분석 결과 출력
+        if shared['menu_data'].get('situation_analysis'):
+            analysis = shared['menu_data']['situation_analysis']
+            print(f"🔍 감지된 상황: {analysis.get('situation_type', 'unknown')}")
+            print(f"📝 상황 요약: {analysis.get('summary', 'N/A')}")
+            print(f"🎯 요구된 액션: {analysis.get('action_required', 'N/A')}")
+        
+    except Exception as e:
+        print(f"❌ 휴무일 테스트 실패: {e}")
+
+def special_menu_test_mode():
+    """
+    특별 메뉴 상황 테스트 모드
+    """
+    print("🎉 특별 메뉴 상황 테스트 모드 실행 중...")
+    
+    # 더미 shared store
+    shared = get_default_shared_store()
+    shared["config"]["debug_mode"] = True
+    shared["config"]["slack_channel"] = "#test-channel"
+    
+    # 특별 메뉴 상황을 시뮬레이션하는 더미 데이터
+    shared["menu_data"]["raw_content"] = """
+🎊 오늘의 특별 이벤트 메뉴 🎊
+
+한정 특별 메뉴: 갈비찜 + 불고기 콤보
+이벤트 기간: 오늘 하루만
+특별 가격: 15,000원 (기존 18,000원)
+
+🥩 특별 메뉴 구성:
+- 프리미엄 갈비찜
+- 불고기
+- 각종 밑반찬
+- 된장찌개
+- 후식 (과일 + 식혜)
+
+🎁 추가 혜택:
+- 음료 무료 제공
+- 디저트 추가 서비스
+
+많이 찾아주세요! 😋
+    """.strip()
+    
+    try:
+        # 특별 메뉴 테스트 플로우 실행
+        flow = create_special_menu_test_flow()
+        
+        # FetchMenuNode 건너뛰기 위해 상태 미리 설정
+        shared["status"]["fetch_success"] = True
+        
+        flow.run(shared)
+        
+        print("✅ 특별 메뉴 테스트 완료!")
+        print(f"📊 최종 상태: {shared['status']}")
+        
+        # 상황 분석 결과 출력
+        if shared['menu_data'].get('situation_analysis'):
+            analysis = shared['menu_data']['situation_analysis']
+            print(f"🔍 감지된 상황: {analysis.get('situation_type', 'unknown')}")
+            print(f"📝 상황 요약: {analysis.get('summary', 'N/A')}")
+            print(f"🎯 요구된 액션: {analysis.get('action_required', 'N/A')}")
+        
+    except Exception as e:
+        print(f"❌ 특별 메뉴 테스트 실패: {e}")
+
 def immediate_mode():
     """
     즉시 실행 모드: 지금 당장 메뉴 워크플로우 실행
@@ -168,9 +275,21 @@ def immediate_mode():
     
     print("📊 실행 결과:")
     print(f"- 수집 성공: {shared['status'].get('fetch_success', False)}")
+    print(f"- 상황 감지: {shared['status'].get('situation_detected', False)}")
     print(f"- 요약 성공: {shared['status'].get('summarize_success', False)}")
     print(f"- 전송 성공: {shared['status'].get('send_success', False)}")
+    print(f"- 휴무일 알림: {shared['status'].get('holiday_notice_sent', False)}")
+    print(f"- 특별 메뉴 알림: {shared['status'].get('special_menu_sent', False)}")
     print(f"- 전체 성공: {shared['status'].get('final_success', False)}")
+    
+    # 상황 분석 결과 출력
+    if shared['menu_data'].get('situation_analysis'):
+        analysis = shared['menu_data']['situation_analysis']
+        print(f"\n🔍 상황 분석 결과:")
+        print(f"  - 상황 타입: {analysis.get('situation_type', 'unknown')}")
+        print(f"  - 신뢰도: {analysis.get('confidence', 0.0)}")
+        print(f"  - 감지된 키워드: {', '.join(analysis.get('detected_keywords', []))}")
+        print(f"  - 상황 요약: {analysis.get('summary', 'N/A')}")
 
 def scheduler_mode():
     """
@@ -210,6 +329,8 @@ def main():
   python main.py --now              # 즉시 실행 모드  
   python main.py --test             # 테스트 모드 (더미 데이터)
   python main.py --check            # 환경변수 체크
+  python main.py --holiday-test     # 휴무일 상황 테스트
+  python main.py --special-test     # 특별 메뉴 상황 테스트
         """
     )
     
@@ -231,6 +352,18 @@ def main():
         help='환경변수 설정 확인'
     )
     
+    parser.add_argument(
+        '--holiday-test', 
+        action='store_true', 
+        help='휴무일 상황 테스트 모드'
+    )
+    
+    parser.add_argument(
+        '--special-test', 
+        action='store_true', 
+        help='특별 메뉴 상황 테스트 모드'
+    )
+    
     args = parser.parse_args()
     
     print("🍽️ 구도 한식뷔페 메뉴 알림 시스템")
@@ -240,6 +373,10 @@ def main():
         check_environment()
     elif args.test:
         test_mode()
+    elif args.holiday_test:
+        holiday_test_mode()
+    elif args.special_test:
+        special_menu_test_mode()
     elif args.now:
         immediate_mode()
     else:
